@@ -93,7 +93,7 @@ class Viewer:
         os.unsetenv('COLUMNS')
         self.scr = args[0]
         self.data = [[str(j) for j in i] for i in args[1]]
-        self.header_offset_orig = 3
+        self.header_offset_orig = 2
         self.header = self.data[0]
         if len(self.data) > 1:
             del self.data[0]
@@ -782,15 +782,12 @@ class Viewer:
         self.scr.move(0, 0)
         self.scr.clrtoeol()
         info = self.location_string(yp, xp)
-        addstr(self.scr, info, curses.A_REVERSE)
+        addstr(self.scr, info, curses.A_REVERSE | curses.A_UNDERLINE)
 
         # Adds the current cell content after the 'current cell' display
         wc = self.max_x - len(info) - 2
         s = self.cellstr(yp, xp, wc)
-        addstr(self.scr, "  " + s, curses.A_NORMAL)
-
-        # Print a divider line
-        self.scr.hline(1, 0, curses.ACS_HLINE, self.max_x)
+        addstr(self.scr, "  " + s, curses.A_NORMAL | curses.A_UNDERLINE)
 
         # Print the header if the correct offset is set
         if self.header_offset == self.header_offset_orig:
