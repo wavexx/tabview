@@ -346,14 +346,14 @@ class Viewer:
         """Open search window, get input and set the search string."""
         if self.init_search is not None:
             return
-        scr2 = curses.newwin(3, self.max_x, self.max_y - 3, 0)
-        scr3 = scr2.derwin(1, self.max_x - 12, 1, 9)
-        scr2.box()
-        scr2.move(1, 1)
-        addstr(scr2, "Search: ")
+        scr2 = curses.newwin(0, self.max_x, self.max_y - 1, 0)
+        addstr(scr2, "Search: ", curses.A_REVERSE | curses.A_BOLD)
         scr2.refresh()
+        scr3 = scr2.derwin(0, self.max_x - 8, 0, 8)
+        scr3.bkgdset(curses.ascii.SP, curses.A_REVERSE)
+        scr3.clrtoeol()
         curses.curs_set(1)
-        self._search_win_open = 3
+        self._search_win_open = 1
         self.textpad = Textbox(scr3, insert_mode=True)
         self.search_str = self.textpad.edit(self._search_validator)
         self.search_str = self.search_str.lower().strip()
