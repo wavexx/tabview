@@ -329,18 +329,7 @@ class Viewer:
         """
         if ch == curses.ascii.NL:  # Enter
             return curses.ascii.BEL
-        elif ch == 127:  # Backspace
-            self.search_str = self.textpad.gather().strip().lower()[:-1]
-            return 8
-        else:
-            if 0 < ch < 256:
-                c = chr(ch)
-                if c in string.printable:
-                    res = self.textpad.gather().strip().lower()
-                    self.search_str = res + chr(ch)
-                    self.search_results(look_in_cur=True)
-                    self.display()
-            return ch
+        return ch
 
     def search(self):
         """Open search window, get input and set the search string."""
@@ -361,9 +350,10 @@ class Viewer:
             curses.curs_set(0)
         except _curses.error:
             pass
+        self._search_win_open = 0
         if self.search_str:
             self.init_search = None
-        self._search_win_open = 0
+            self.search_results(look_in_cur=True)
 
     def search_results(self, rev=False, look_in_cur=False):
         """Given self.search_str or self.init_search, find next result after
